@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 class AssertjOrderProviderTest : OrderProviderTest {
 
     @Test
-    override fun `simple assert pass`() {
+    override fun `01 - simple assert pass`() {
         assertThat(OrderProvider.provideOrder1())
             .isEqualTo(
                 Order(
@@ -26,7 +26,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `simple assert fail`() {
+    override fun `02 - simple assert fail`() {
         assertThat(OrderProvider.provideOrder1())
             .isEqualTo(
                 Order(
@@ -41,7 +41,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `nullable fluent assert pass`() {
+    override fun `03 - nullable fluent assert pass`() {
         assertThat(OrderProvider.provideOrder2())
             .isNotNull
             .extracting { it!!.orderType }
@@ -49,7 +49,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `nullable fluent assert fail`() {
+    override fun `04 - nullable fluent assert fail`() {
         assertThat(OrderProvider.provideOrder2())
             .isNotNull
             .extracting { it!!.orderType }
@@ -57,7 +57,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `multiple fields on the same object pass`() {
+    override fun `05 - multiple fields on the same object pass`() {
         assertSoftly {
             with(OrderProvider.provideOrder1()) {
                 it.assertThat(orderType)
@@ -71,7 +71,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `multiple fields on the same object fail`() {
+    override fun `06 - multiple fields on the same object fail`() {
         assertSoftly {
             with(OrderProvider.provideOrder1()) {
                 it.assertThat(orderType)
@@ -85,19 +85,19 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `collection elements pass`() {
+    override fun `07 - collection elements pass`() {
         assertThat(OrderProvider.providerOrderList())
             .containsExactlyInAnyOrder(OrderProvider.provideOrder1(), OrderProvider.provideOrder2())
     }
 
     @Test
-    override fun `collection elements fail`() {
+    override fun `08 - collection elements fail`() {
         assertThat(OrderProvider.providerOrderList())
             .containsExactlyInAnyOrder(OrderProvider.provideOrder2(), Order(quantity = 30))
     }
 
     @Test
-    override fun `multiple subjects softly fail`() {
+    override fun `09 - multiple subjects softly fail`() {
         assertSoftly {
             it.assertThat(OrderProvider.provideOrder1())
                 .isEqualTo(OrderProvider.provideOrder2())
@@ -107,7 +107,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `custom assertion fail`() {
+    override fun `10 - custom assertion fail`() {
         assertThatOrder(OrderProvider.provideOrder1().copy(orderSide = OrderSide.SELL, quantity = -1))
             .isBuy()
     }
@@ -119,7 +119,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `exception thrown`() {
+    override fun `11 - exception thrown`() {
         assertThatThrownBy {
             error("Fail in test?")
         }.isExactlyInstanceOf(IllegalStateException::class.java)
@@ -127,19 +127,19 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `map entry pass`() {
+    override fun `12 - map entry pass`() {
         assertThat(OrderProvider.providerOrderList().groupBy { it.orderSide })
             .containsEntry(OrderSide.BUY, listOf(OrderProvider.provideOrder1()))
     }
 
     @Test
-    override fun `map entry fail`() {
+    override fun `13 - map entry fail`() {
         assertThat(OrderProvider.providerOrderList().groupBy { it.orderSide })
             .containsEntry(OrderSide.BUY, listOf(OrderProvider.provideOrder2()!!))
     }
 
     @Test
-    override fun `compare by fields fail`() {
+    override fun `14 - compare by fields fail`() {
         assertThat(OrderProvider.provideOrder1())
             .usingRecursiveComparison()
             .ignoringFields("status", "timeInForce")
@@ -156,7 +156,7 @@ class AssertjOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `check is instance and starts with`() {
+    override fun `15 - check is instance and starts with`() {
         val value = "" as Any
         assertThat(value)
             .isInstanceOf(String::class.java)

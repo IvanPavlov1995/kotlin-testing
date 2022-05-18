@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test
 class KotestOrderProviderTest : OrderProviderTest {
 
     @Test
-    override fun `simple assert pass`() {
+    override fun `01 - simple assert pass`() {
         OrderProvider.provideOrder1()
             .shouldBe(
                 Order(
@@ -34,7 +34,7 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `simple assert fail`() {
+    override fun `02 - simple assert fail`() {
         OrderProvider.provideOrder1()
             .shouldBe(
                 Order(
@@ -49,7 +49,7 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `nullable fluent assert pass`() {
+    override fun `03 - nullable fluent assert pass`() {
         assertSoftly(OrderProvider.provideOrder2()) {
             shouldNotBeNull()
             orderType.shouldBe(OrderType.REGULAR)
@@ -57,7 +57,7 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `nullable fluent assert fail`() {
+    override fun `04 - nullable fluent assert fail`() {
         assertSoftly(OrderProvider.provideOrder2()) {
             shouldNotBeNull()
             orderType.shouldBe(OrderType.EXERCISE)
@@ -65,7 +65,7 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `multiple fields on the same object pass`() {
+    override fun `05 - multiple fields on the same object pass`() {
         assertSoftly(OrderProvider.provideOrder1()) {
             orderType.shouldBe(OrderType.REGULAR) // NO typesafety
             orderSide.shouldBe(OrderSide.BUY)
@@ -74,7 +74,7 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `multiple fields on the same object fail`() {
+    override fun `06 - multiple fields on the same object fail`() {
         assertSoftly(OrderProvider.provideOrder1()) {
             orderType.shouldBe(OrderType.EXERCISE) // NO typesafety
             orderSide.shouldBe(OrderSide.SELL)
@@ -83,19 +83,19 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `collection elements pass`() {
+    override fun `07 - collection elements pass`() {
         OrderProvider.providerOrderList()
             .shouldContainExactlyInAnyOrder(OrderProvider.provideOrder1(), OrderProvider.provideOrder2())
     }
 
     @Test
-    override fun `collection elements fail`() {
+    override fun `08 - collection elements fail`() {
         OrderProvider.providerOrderList()
             .shouldContainExactlyInAnyOrder(OrderProvider.provideOrder2(), Order(quantity = 30))
     }
 
     @Test
-    override fun `multiple subjects softly fail`() {
+    override fun `09 - multiple subjects softly fail`() {
         assertSoftly {
             OrderProvider.provideOrder1().shouldBe(OrderProvider.provideOrder2())
             OrderProvider.provideOrder2().shouldBe(OrderProvider.provideOrder1())
@@ -103,7 +103,7 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `custom assertion fail`() {
+    override fun `10 - custom assertion fail`() {
         OrderProvider.provideOrder1().copy(orderSide = OrderSide.SELL)
             .shouldBeBuy()
     }
@@ -115,26 +115,26 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `exception thrown`() {
+    override fun `11 - exception thrown`() {
         shouldThrow<IllegalStateException> {
             error("Fail in test?")
         }.shouldHaveMessage("Fail in test")
     }
 
     @Test
-    override fun `map entry pass`() {
+    override fun `12 - map entry pass`() {
         OrderProvider.providerOrderList().groupBy { it.orderSide }
             .shouldContain(OrderSide.BUY, listOf(OrderProvider.provideOrder1()))
     }
 
     @Test
-    override fun `map entry fail`() {
+    override fun `13 - map entry fail`() {
         OrderProvider.providerOrderList().groupBy { it.orderSide }
             .shouldContain(OrderSide.BUY, listOf(OrderProvider.provideOrder2()))
     }
 
     @Test
-    override fun `compare by fields fail`() {
+    override fun `14 - compare by fields fail`() {
         OrderProvider.provideOrder1()
             .shouldBeEqualToComparingFieldsExcept(
                 Order(
@@ -151,7 +151,7 @@ class KotestOrderProviderTest : OrderProviderTest {
     }
 
     @Test
-    override fun `check is instance and starts with`() {
+    override fun `15 - check is instance and starts with`() {
         ("" as Any)
             .shouldBeInstanceOf<String>()
             .shouldStartWith("abc")
